@@ -1,0 +1,47 @@
+<!-- 
+    Run with:
+        serve -s -l 3333
+    OR
+        python3 -m http.server 3333
+-->
+
+<html>
+  <head>
+    <style>
+      textarea {
+        width: 700px;
+        height: 700px;
+      }
+      .container {
+        display: flex;
+        justify-content: space-evenly;
+      }
+    </style>
+    <script src="eztz.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="sodium-sumo-master.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="demo.js"></script>
+    <script src="smartjs/smart.js" type="text/javascript" charset="utf-8"></script>
+    <script src="smartjs/smartmljs.bc.js" type="text/javascript" charset="utf-8"></script>
+    <script src="brython/brython.js" type="text/javascript" charset="utf-8"></script>
+    <script src="brython/brython_stdlib.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body onload="brython({debug: 1, indexedDB: false})">
+
+    <div class="container">
+      <textarea id="code" placeholder="Insert code here..."></textarea>
+      <textarea id="output" placeholder="Output will appear here..." disabled></textarea>
+    </div>
+<!-- 
+    <div class="container">
+      <button onclick="runCode();">Generate</button>
+    </div> -->
+
+    <!-- <script>
+        // const codeEl = document.getElementById("code");
+        // const outputEl = document.getElementById("output");
+        // codeEl.value = sample;
+    </script> -->
+
+    <script type="text/python" src="smartpyio.py"></script>
+  </body>
+<html>

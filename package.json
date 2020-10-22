@@ -1,0 +1,15 @@
+{
+  "name": "smartpy-demo-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bhaskar Singh <allstarbhaskarkumar@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bs58check": "^2.1.2",
+    "libsodium-wrappers-sumo": "^0.7.8"
+  }
+}
