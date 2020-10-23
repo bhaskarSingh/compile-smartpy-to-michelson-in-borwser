@@ -139,6 +139,23 @@ def toException(x):
     return Exception(x)
 
 
+testTemplate = """
+@sp.add_test(name = "%s")
+def test():
+    # define a contract
+    c1 = %s(..)
+    scenario  = sp.testScenario()
+    scenario += c1
+    # scenario += c1.myEntryPoint(..)
+    # scenario += c1.myEntryPoint(..)
+    # scenario += c1.myEntryPoint(..)
+    # scenario.verify(..)
+    # scenario.show(..)
+    # scenario.p(..)
+    # scenario.h1(..)
+"""
+
+
 def run(code):
     window.pythonTests.clear()
     import smartpy
@@ -155,7 +172,20 @@ def run(code):
     results = []
     for test in window.pythonTests:
         results = test.generateMichelson()
-    return javascript.JSON.stringify(results)
+
+    if True and len(window.pythonTests) == 0:
+        html = ""
+        for c in env:
+            if "$" in c:
+                continue
+            if hasattr(env[c], "collectMessages"):
+                html += (
+                    "There is a sp.Contract class '%s' but no test is defined.\n\nPlease add a test such as:\n%s"
+                    % (str(c), testTemplate % (c, c))
+                )
+                return javascript.JSON.stringify({'success': False, 'error': html})
+
+    return javascript.JSON.stringify({'success': True, 'result': results})
 
 
 window.generate = run
