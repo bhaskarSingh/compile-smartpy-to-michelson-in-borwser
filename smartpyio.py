@@ -139,6 +139,57 @@ def toException(x):
     return Exception(x)
 
 
+def formatErrorLine(line):
+    i = -1
+    while i + 2 < len(line) and line[i + 1] == " ":
+        i += 1
+    if 0 <= i:
+        line = i * "&nbsp;" + line[i + 1:]
+    return line
+
+
+def showTraceback(title, trace):
+    title = "Error: " + str(title)
+    lines = []
+    skip = False
+    for line in trace.split("\n"):
+        if not line:
+            continue
+        if skip:
+            skip = False
+            continue
+        skip = (
+            (
+                "module smartpy line" in line
+                and ("in runScenario" in line or "in pp" in line)
+            )
+            or (
+                "module smartpyio line" in line
+                and ("in run" in line or "in eval" in line or "in toException" in line)
+            )
+            or ("module __main__" in line and "in run" in line)
+        )
+        if not skip:
+            lineStrip = line.strip()
+            lineId = None
+            line = formatErrorLine(line)
+            if lineStrip.startswith("module <module>") or lineStrip.startswith(
+                "File <string>"
+            ):
+                lineId = line.strip().split()[3].strip(",")
+                line = line.replace(lineId, reverseLines.get(lineId, lineId))
+            line = line.replace("module <module>", "SmartPy code").replace(
+                "File <string>", "SmartPy code"
+            )
+            if "SmartPy code" in line:
+                line = line
+            if lineId:
+                line = ( line + " " )
+            lines.append(line)
+    error = title + "\n\n" + lines[0] + "\n\n" + "\n".join(lines[1:-1])
+    return javascript.JSON.stringify({'success': False, 'error': error})
+
+
 testTemplate = """
 @sp.add_test(name = "%s")
 def test():
@@ -190,3 +241,4 @@ def run(code):
 
 window.generate = run
 window.toException = toException
+window.showTraceback = showTraceback
